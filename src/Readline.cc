@@ -6,7 +6,9 @@ using namespace Balau;
 Readline::Readline(const String & program, IO<Handle> in)
     : m_in(in)
 {
+    HistEvent ev;
     m_hist = history_init();
+    history(m_hist, &ev, H_SETSIZE, 5000);
     m_el = el_init(program.to_charp(), stdin, stdout, stderr);
     el_set(m_el, EL_CLIENTDATA, this);
     el_set(m_el, EL_PROMPT, (const char * (*)(EditLine *)) &Readline::elPrompt);
@@ -31,6 +33,11 @@ String Readline::gets() {
     if (!line) {
         m_eof = true;
         return "";
+    }
+
+    if (*line) {
+        HistEvent ev;
+        history(m_hist, &ev, H_ENTER, line);
     }
 
     return line;
