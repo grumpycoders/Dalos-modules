@@ -6,15 +6,18 @@ using namespace Balau;
 Readline::Readline(const String & program, IO<Handle> in)
     : m_in(in)
 {
+    m_hist = history_init();
     m_el = el_init(program.to_charp(), stdin, stdout, stderr);
     el_set(m_el, EL_CLIENTDATA, this);
     el_set(m_el, EL_PROMPT, (const char * (*)(EditLine *)) &Readline::elPrompt);
     el_set(m_el, EL_SIGNAL, 1);
     el_set(m_el, EL_GETCFN, (int (*)(EditLine *, char *)) &Readline::elGetCFN);
+    el_set(m_el, EL_HIST, history, m_hist);
 }
 
 Readline::~Readline() {
     el_end(m_el);
+    history_end(m_hist);
 }
 
 void Readline::setPrompt(const String & prompt) {

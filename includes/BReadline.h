@@ -13,6 +13,7 @@ class Readline {
     void setPrompt(const Balau::String & prompt);
   private:
     EditLine * m_el = NULL;
+    History * m_hist = NULL;
     Balau::IO<Balau::Handle> m_in;
     bool m_eof = false;
     Balau::String m_prompt = "> ";
