@@ -46,8 +46,8 @@ struct sLua_LuaLoad {
                 h.asA<Input>()->open();
                 status = CREATETASK;
             case CREATETASK:
-                status = WAITTASK;
                 execFile->exec(L);
+                status = WAITTASK;
             case WAITTASK:
                 execFile->throwError();
             }
