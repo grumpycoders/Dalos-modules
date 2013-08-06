@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "LuaLoad.h"
 #include "LuaTask.h"
 #include "Buffer.h"
@@ -37,19 +39,17 @@ struct sLua_LuaLoad {
             h = new Input(L.tostring());
             status = OPENING;
         }
-        LuaExecFile * execFile = NULL;
+        std::shared_ptr<LuaExecFile> execFile(new LuaExecFile(h));
         return L.yield(Future<int>([L, status, h, execFile]() mutable {
             switch (status) {
             case OPENING:
                 h.asA<Input>()->open();
                 status = CREATETASK;
             case CREATETASK:
-                execFile = new LuaExecFile(h);
                 status = WAITTASK;
                 execFile->exec(L);
             case WAITTASK:
-                execFile->throwError(); // will induce a memory leak in case of an actual error.
-                delete execFile;
+                execFile->throwError();
             }
             return 0;
         }));
