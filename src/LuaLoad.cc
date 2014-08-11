@@ -28,6 +28,7 @@ struct sLua_LuaLoad {
             OPENING,
             CREATETASK,
             WAITTASK,
+            CLEANUP,
         } status;
         if (L.isobject()) {
             h = L.recast<LuaIO>()->getIO();
@@ -51,6 +52,9 @@ struct sLua_LuaLoad {
                 status = WAITTASK;
             case WAITTASK:
                 execFile->throwError();
+                status = CLEANUP;
+            case CLEANUP:
+                h->close();
             }
             return 0;
         }));
