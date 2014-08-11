@@ -1,5 +1,6 @@
 #include <memory>
 
+#include "LuaHandle.h"
 #include "LuaLoad.h"
 #include "LuaTask.h"
 #include "Buffer.h"
@@ -9,7 +10,7 @@ using namespace Balau;
 
 namespace {
 
-class LuaLoad { };
+struct LuaLoad { void cleanup() { } };
 
 enum LuaLoad_functions_t {
     LUALOAD
@@ -29,7 +30,7 @@ struct sLua_LuaLoad {
             WAITTASK,
         } status;
         if (L.isobject()) {
-            h = L.recast<Handle>();
+            h = L.recast<LuaIO>()->getIO();
             if (h.isA<Buffer>()) {
                 L.load(h);
                 return 0;
