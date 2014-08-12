@@ -28,7 +28,7 @@ void Readline::setPrompt(const Balau::String & prompt) {
 #include <BStdIO.h>
 
 Readline::Readline(const String & program)
-    : m_in(new StdIn())
+    : m_in(new StdIN())
 {
     HistEvent ev;
     m_hist = history_init();
