@@ -1,0 +1,3 @@
+[submodule "editline"]
+	path = editline
+	url = https://github.com/pixelxeno/editline.git

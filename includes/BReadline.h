@@ -1,12 +1,28 @@
 #pragma once
 
+#ifdef USE_EDITLINE
+#include <BString.h>
+#include <Handle.h>
+
+class Readline {
+  public:
+      Readline(const Balau::String & program);
+      ~Readline();
+      Balau::String gets();
+      bool gotEOF();
+      void setPrompt(const Balau::String & prompt);
+};
+
+#endif
+
+#ifdef USE_HISTEDIT
 #include <histedit.h>
 #include <BString.h>
 #include <Handle.h>
 
 class Readline {
   public:
-      Readline(const Balau::String & program, Balau::IO<Balau::Handle>);
+      Readline(const Balau::String & program);
       ~Readline();
     Balau::String gets();
     bool gotEOF() { return m_eof; }
@@ -23,3 +39,5 @@ class Readline {
     static int elGetCFN(EditLine *, char * c);
     int elGetCFN(char * c);
 };
+
+#endif

@@ -3,8 +3,32 @@
 
 using namespace Balau;
 
-Readline::Readline(const String & program, IO<Handle> in)
-    : m_in(in)
+#ifdef USE_EDITLINE
+
+Readline::Readline(const Balau::String & program) {
+}
+
+Readline::~Readline() {
+}
+
+Balau::String Readline::gets() {
+    return "";
+}
+
+bool Readline::gotEOF() {
+    return true;
+}
+
+void Readline::setPrompt(const Balau::String & prompt) {
+}
+
+#endif
+
+#ifdef USE_HISTEDIT
+#include <BStdIO.h>
+
+Readline::Readline(const String & program)
+    : m_in(new StdIn())
 {
     HistEvent ev;
     m_hist = history_init();
@@ -58,3 +82,4 @@ int Readline::elGetCFN(EditLine * el, char * c) {
 int Readline::elGetCFN(char * c) {
     return m_in->read(c, 1);
 }
+#endif
